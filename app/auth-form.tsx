@@ -52,8 +52,8 @@ const Auth = () => {
         router.replace('/account')
       }
     } catch (error) {
-      console.log('Error thrown:', error.message)
-      alert(error.error_description || error)
+      //console.log('Error thrown:', error.message)
+      //alert(error.error_description || error)
     }
   }
 
