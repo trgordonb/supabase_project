@@ -42,8 +42,7 @@ const Auth = () => {
 
 
   const handleLogin = async (type: string, email: string, password: string) => {
-    try {
-      const { data, error } =
+    const { data, error } =
         type === 'LOGIN'
           ? await supabase.auth.signInWithPassword({ email, password })
           : await supabase.auth.signUp({ email, password })
@@ -51,12 +50,8 @@ const Auth = () => {
       if (data) {
         router.replace('/account')
       }
-    } catch (error) {
-      //console.log('Error thrown:', error.message)
-      //alert(error.error_description || error)
-    }
-  }
-
+  } 
+  
   async function handleOAuthLogin() {
     let { data, error } = await supabase.auth.signInWithOAuth({ 
       provider: 'google',
@@ -72,7 +67,7 @@ const Auth = () => {
   }
 
   async function forgotPassword(e) {
-    e.preventDefault()
+    //e.preventDefault()
     var email = prompt('Please enter your email:')
     if (email === null || email === '') {
       window.alert('You must enter your email.')
