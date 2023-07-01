@@ -66,7 +66,7 @@ const Auth = () => {
     if (error) console.log('Error: ', error.message)
   }
 
-  async function forgotPassword(e) {
+  async function forgotPassword() {
     //e.preventDefault()
     var email = prompt('Please enter your email:')
     if (email === null || email === '') {
