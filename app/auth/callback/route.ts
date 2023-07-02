@@ -9,7 +9,11 @@ export async function GET(req: NextRequest) {
   const code = searchParams.get('code')
 
   if (code) {
-    await supabase.auth.exchangeCodeForSession(code)
+    try {
+      await supabase.auth.exchangeCodeForSession(code)
+    } catch {
+      
+    }
   }
 
   return NextResponse.redirect(new URL('/account', req.url))
