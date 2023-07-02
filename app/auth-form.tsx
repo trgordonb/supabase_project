@@ -42,14 +42,19 @@ const Auth = () => {
 
 
   const handleLogin = async (type: string, email: string, password: string) => {
+    console.log(getURL())
     const { data, error } =
         type === 'LOGIN'
           ? await supabase.auth.signInWithPassword({ email, password })
-          : await supabase.auth.signUp({ email, password })
-      if (error) console.log('Error returned:', error.message)
-      if (data) {
+          : await supabase.auth.signUp({ email, password, options: { emailRedirectTo: getURL() } })
+    if (error) console.log('Error returned:', error.message)
+    if (data) {
+      if (type === 'LOGIN') {
         router.replace('/account')
+      } else if (type === 'SIGNUP') {
+        router.replace('/account/verify')
       }
+    }
   } 
   
   async function handleOAuthLogin() {
