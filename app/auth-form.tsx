@@ -60,7 +60,7 @@ const Auth = () => {
     }
   } 
   
-  async function handleOAuthLogin() {
+  const handleOAuthLogin = async () => {
     let { data, error } = await supabase.auth.signInWithOAuth({ 
       provider: 'google',
       options: {
@@ -74,18 +74,15 @@ const Auth = () => {
     if (error) console.log('Error: ', error.message)
   }
 
-  async function forgotPassword() {
+  const forgotPassword = async () =>{
     //e.preventDefault()
     var email = prompt('Please enter your email:')
     if (email === null || email === '') {
       window.alert('You must enter your email.')
     } else {
-      let { error } = await supabase.auth.resetPasswordForEmail(email, {redirectTo: getURL('reset')})
-      if (error) {
-        console.log('Error: ', error.message)
-      } else {
-        alert('Password recovery email has been sent.')
-      }
+      window.alert('Please check your inbox to get a link to reset your password')
+      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {redirectTo: getURL('reset')})
+      if (error) console.log('Error returned:', error.message)
     }
   }
 

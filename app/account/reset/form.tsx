@@ -17,6 +17,7 @@ export default function ResetPasswordForm() {
             console.log(error.message)
         }
         if (data) {
+            await supabase.auth.signOut()
             router.replace('/')
         }
     }
