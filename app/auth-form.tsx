@@ -12,7 +12,7 @@ const Auth = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const getURL = () => {
+  const getURL = (type: string = 'callback') => {
     let url =
       process?.env?.NEXT_PUBLIC_SITE_URL ?? // Set this to your site URL in production env.
       process?.env?.NEXT_PUBLIC_VERCEL_URL ?? // Automatically set by Vercel.
@@ -21,7 +21,11 @@ const Auth = () => {
     url = url.includes('http') ? url : `https://${url}`
     // Make sure to include a trailing `/`.
     url = url.charAt(url.length - 1) === '/' ? url : `${url}/`
-    url = `${url}auth/callback`
+    if (type === 'callback') {
+      url = `${url}auth/callback`
+    } else if (type === 'reset') {
+      url = `${url}account/reset`
+    }
     return url
   }
 
@@ -42,11 +46,10 @@ const Auth = () => {
 
 
   const handleLogin = async (type: string, email: string, password: string) => {
-    console.log(getURL())
     const { data, error } =
         type === 'LOGIN'
           ? await supabase.auth.signInWithPassword({ email, password })
-          : await supabase.auth.signUp({ email, password, options: { emailRedirectTo: getURL() } })
+          : await supabase.auth.signUp({ email, password, options: { emailRedirectTo: getURL('callback') } })
     if (error) console.log('Error returned:', error.message)
     if (data) {
       if (type === 'LOGIN') {
@@ -65,7 +68,7 @@ const Auth = () => {
           access_type: 'offline',
           prompt: 'consent',
         },
-        redirectTo: getURL()
+        redirectTo: getURL('callback')
       },
     })
     if (error) console.log('Error: ', error.message)
@@ -77,7 +80,7 @@ const Auth = () => {
     if (email === null || email === '') {
       window.alert('You must enter your email.')
     } else {
-      let { error } = await supabase.auth.resetPasswordForEmail(email)
+      let { error } = await supabase.auth.resetPasswordForEmail(email, {redirectTo: getURL('reset')})
       if (error) {
         console.log('Error: ', error.message)
       } else {
